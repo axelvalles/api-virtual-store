@@ -3,7 +3,7 @@ const app = express();
 const morgan = require('morgan');
 // SETTINGS
 app.set('PORT', process.env.PORT || 3000);
-app.set('APPNAME', process.env.APP_NAME || 'API Virtual Store');
+app.set('APPNAME', process.env.APP_NAME || 'API Staionery Store');
 
 // MIDDLEWARES
 app.use(express.json());
@@ -13,5 +13,6 @@ app.use(morgan('dev'));
 // PUBLIC STATICS
 // GLOBAL VARIABLES
 // ROUTES
-// EXPORTIN APP SERVER
+app.use('/products', require('./routes/products.route'));
+// EXPORTING APP SERVER
 module.exports = app;
