@@ -1,5 +1,5 @@
 const { DataTypes, Model } = require('sequelize');
-const  sequelize  = require('../database');
+const sequelize = require('../database');
 
 class User extends Model {}
 
@@ -23,19 +23,18 @@ User.init(
 		},
 		phone: {
 			type: DataTypes.STRING,
-			defaultValue: 'not phone provide'
+			defaultValue: 'not phone provide',
 		},
 		address: {
 			type: DataTypes.STRING,
-			defaultValue: 'not address provide'
-		}
-
+			defaultValue: 'not address provide',
+		},
 	},
 	{
 		sequelize,
 		modelName: 'User',
+		tableName: 'users',
 	},
 );
 
-module.exports = User
-
+module.exports = User;
