@@ -3,10 +3,10 @@ const router = Router()
 
 const {login,resgister,auth} = require('../controllers/user.controller')
 
-app.post('/login', login)
+router.post('/login', login)
 
-app.post('/register', resgister)
+router.post('/register', resgister)
 
-app.get('/auth', auth)
+router.get('/auth', auth)
 
 module.exports = router

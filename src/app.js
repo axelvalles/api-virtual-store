@@ -1,7 +1,9 @@
 const express = require('express');
-const app = express();
 const morgan = require('morgan');
 const helmet = require('helmet')
+
+//initialization
+const app = express();
 
 // SETTINGS
 app.set('PORT', process.env.PORT || 3000);
