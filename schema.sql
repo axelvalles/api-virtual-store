@@ -33,6 +33,7 @@ DESC categories;
 DROP TABLE if EXISTS products;
 CREATE TABLE if NOT EXISTS products(
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	category_id INT UNSIGNED,
 	_code VARCHAR(255) NOT NULL,
 	_name VARCHAR(255) NOT NULL,
 	image VARCHAR(255) NOT NULL,
@@ -46,6 +47,8 @@ CREATE TABLE if NOT EXISTS products(
 	CONSTRAINT uq_products_name UNIQUE (_name),
 	CONSTRAINT uq_products_code UNIQUE (_code)
 );
-
+-- ADD RELATIONSHIP PRODUCTS - CATEGORIES
+ALTER TABLE products
+  ADD CONSTRAINT fk_products_categories FOREIGN KEY (category_id) REFERENCES
+  categories(id) ON UPDATE CASCADE ON DELETE SET NULL 
 DESC products;
-

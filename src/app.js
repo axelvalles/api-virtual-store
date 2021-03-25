@@ -18,7 +18,8 @@ app.use(helmet());
 // PUBLIC STATICS
 // GLOBAL VARIABLES
 // ROUTES
-app.use('/products', require('./routes/products.route'));
+app.use('/products', require('./routes/product.route'));
+app.use('/categories', require('./routes/category.routes'));
 app.use('/user', require('./routes/user.routes'));
 // EXPORTING APP SERVER
 // EXPORTIN APP SERVER
