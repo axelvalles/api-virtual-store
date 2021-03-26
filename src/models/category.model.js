@@ -8,17 +8,13 @@ Category.init(
 		_name: {
 			type: DataTypes.STRING,
 			allowNull: false,
-		},
-		// createdAt: {
-		// 	type: DataTypes.DATE,
-		// 	allowNull: true,
-		// 	defaultValue: Date.now(),
-		// },
-		// updatedAt: {
-		// 	type: DataTypes.DATE,
-		// 	allowNull: true,
-		// 	defaultValue: Date.now(),
-		// },
+			validate: {
+				len: {
+					args: [3,255],
+					msg: "El nombre de la categoria debe tener almenos 3 caracteres"
+				}
+			}
+		}
 	},
 	{
 		sequelize,

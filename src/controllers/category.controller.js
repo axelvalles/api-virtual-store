@@ -37,32 +37,32 @@ categoryController.save = async (req, res) => {
 };
 
 categoryController.update = async (req, res) => {
-	const {id} = req.params
-	const {name} = req.body
-
-	const category = await Category.update({_name:name}, {where: {id}})
-
-	res.json({
-		status: 200,
-		category,
-		message: 'Categoria actulizada con exito'
-	})
-	/*try {
-		const category = await Category.create({
-			_name: name,
-		});
-	
-		res.status(201).json({
-			status: 201,
-			category: category,
-			message: 'Categoria Creada con Exito',
-		});
+	const { id } = req.params;
+	const { name } = req.body;
+	console.log(id);
+	try {
+		const category = await Category.update({ _name: name }, { where: { id } });
+		if(category[0] != 0){
+			res.json({
+				status: 200,
+				category,
+				message: 'Categoria actulizada con exito',
+			});
+		}else{
+			res.json({
+				status: 500,
+				category,
+				message: 'Id de la categoria invalido',
+			});
+		}
+		
 	} catch (error) {
-		res.status(500).json({
+		res.json({
 			status: 500,
-			message: error,
+			message: 'Ocurrio un error vuelve a intentarlo',
+			error
 		});
-	} */
+	}
 };
 
 module.exports = categoryController;

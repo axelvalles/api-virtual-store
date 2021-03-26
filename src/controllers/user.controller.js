@@ -1,9 +1,9 @@
-const userMethods = {};
+const userController = {};
 const User = require('../models/user.model');
 const bcript = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-userMethods.login = async (req, res) => {
+userController.login = async (req, res) => {
 	try {
 		const { email, password } = req.body;
 		if (email && password) {
@@ -48,7 +48,7 @@ userMethods.login = async (req, res) => {
 	}
 };
 
-userMethods.resgister = async (req, res) => {
+userController.resgister = async (req, res) => {
 	const { email, fullname, username, password } = req.body;
 	try {
 		if (password.length < 6) {
@@ -86,7 +86,7 @@ userMethods.resgister = async (req, res) => {
 	}
 };
 
-userMethods.auth = async (req, res) => {
+userController.auth = async (req, res) => {
 	const token = req.headers['authorization'];
 	if (token) {
 		try {
@@ -112,4 +112,4 @@ userMethods.auth = async (req, res) => {
 	}
 };
 
-module.exports = userMethods;
+module.exports = userController;
