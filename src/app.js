@@ -11,7 +11,7 @@ app.set('APPNAME', process.env.APP_NAME || 'API Staionery Store');
 
 // MIDDLEWARES
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(helmet());
 

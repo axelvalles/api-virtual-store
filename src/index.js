@@ -1,5 +1,6 @@
 const app = require('./app');
 const sequelize = require('./database');
+require('dotenv').config()
 
 async function main() {
 	await app.listen(app.get('PORT'));
