@@ -1,7 +1,7 @@
 const Product = require('../models/product.model')
-const productMethods = {};
+const productController = {};
 
-productMethods.getAll = async (req, res) => {
+productController.findAll = async (req, res) => {
 	try {
 		const data = await Product.findAll();
 		res.json({
@@ -16,14 +16,10 @@ productMethods.getAll = async (req, res) => {
 	}
 };
 
-productMethods.getOne = async (req, res) => {
+productController.findOne = async (req, res) => {
 	const {id} = req.params
 	try {
-		const data = await Product.findOne({
-			where:{
-				id
-			}
-		})
+		const data = await Product.findByPk(id)
 		if(data){
 			res.json({
 				status: 200,
@@ -45,7 +41,7 @@ productMethods.getOne = async (req, res) => {
 	}
 }
 
-productMethods.create = async (req, res) => {
+productController.create = async (req, res) => {
 	const { name, description, image, price, stock, categoryId } = req.body;
 
 	try {
@@ -82,7 +78,7 @@ productMethods.create = async (req, res) => {
 	}
 }
 
-productMethods.update = async (req,res) => {
+productController.update = async (req,res) => {
 	const { id } = req.params;
 	const { name, description, image, price, stock } = req.body;
 	try {
@@ -118,7 +114,7 @@ productMethods.update = async (req,res) => {
 	}
 }
 
-productMethods.destroy = async (req, res) => {
+productController.destroy = async (req, res) => {
 	const {id} = req.params
 	try {	
 		const product = await Product.destroy({
@@ -149,4 +145,5 @@ productMethods.destroy = async (req, res) => {
 	}
 }
 
-module.exports = productMethods;
+
+module.exports = productController;

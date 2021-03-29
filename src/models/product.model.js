@@ -44,12 +44,26 @@ Product.init(
         _price:{
             type: DataTypes.FLOAT,
 			defaultValue: 0,
-			allowNull: false
+			allowNull: false,
+			validate:{
+				isNegative(value){
+					if(value <= 0){
+						throw new Error('El precio debe ser mayor a cero');
+					}
+				}
+			}
         },
         _stock:{
             type: DataTypes.INTEGER,
 			defaultValue: 0,
-			allowNull: false
+			allowNull: false,
+			validate:{
+				isNegative(value){
+					if(value < 0){
+						throw new Error('El stock no debe ser menor a cero');
+					}
+				}
+			}
         },
         _image:{
             type: DataTypes.STRING,

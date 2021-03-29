@@ -21,7 +21,8 @@ app.use(helmet());
 // ROUTES
 app.use('/products', require('./routes/product.routes'));
 app.use('/categories', require('./routes/category.routes'));
-app.use('/user', require('./routes/user.routes'));
+app.use('/sells', require('./routes/sell.routes'));
+app.use('/users', require('./routes/user.routes'));
 // EXPORTING APP SERVER
 // EXPORTIN APP SERVER
 module.exports = app;

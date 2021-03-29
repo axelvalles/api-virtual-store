@@ -1,6 +1,7 @@
 const Category = require('../models/category.model');
 const categoryController = {};
-categoryController.getAll = async (req, res) => {
+
+categoryController.findAll = async (req, res) => {
 	try {
 		const data = await Category.findAll();
 		res.json({
@@ -40,7 +41,7 @@ categoryController.findOne = async (req, res) => {
 	}
 }
 
-categoryController.save = async (req, res) => {
+categoryController.create = async (req, res) => {
 	const { name } = req.body;
 
 	try {
@@ -49,7 +50,7 @@ categoryController.save = async (req, res) => {
 		});
 		res.status(201).json({
 			status: 201,
-			category: category,
+			category,
 			message: 'Categoria Creada con Exito',
 		});
 	} catch (error) {

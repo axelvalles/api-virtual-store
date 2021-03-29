@@ -1,12 +1,11 @@
 const { Router } = require('express');
 const router = Router();
-const { findAll,findOne, create, update, destroy } = require('../controllers/category.controller');
+const { findAll, findOne, create, destroy } = require('../controllers/sell.controller');
 const  auth   = require('../middlewares/auth.middleware')
 
-router.get('/', findAll);
+router.get('/',auth, findAll);
 router.get('/:id',auth, findOne)
 router.post('/add',auth, create);
-router.put('/update/:id', auth ,update);
 router.delete('/delete/:id',auth, destroy)
 
 module.exports = router;
