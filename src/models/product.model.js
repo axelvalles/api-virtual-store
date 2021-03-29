@@ -8,19 +8,17 @@ Product.init(
 	{
 		_name: {
 			type: DataTypes.STRING,
-			unique: true,
+			unique: {
+				args: true,
+				msg: "Ya exite una categoria con este nombre"
+			},
 			allowNull: false,
 			validate: {
 				len: {
 					args: [3,255],
 					msg: "El nombre de la categoria debe tener almenos 3 caracteres"
 				},
-				notEmpty: {
-					args: true,
-					msg: "El nombre de la categoria es requerido"
-				},
 				notNull: {
-					args: true,
 					msg: "El nombre de la categoria es requerido"
 				}
 			}
@@ -33,31 +31,30 @@ Product.init(
 					args: [3,255],
 					msg: "Descripcion de la categoria debe tener almenos 3 caracteres"
 				},
-				notEmpty: {
-					args: true,
-					msg: "La descripcion de la categoria es requerida"
-				},
 				notNull: {
-					args: true,
 					msg: "LA descripcion de la categoria es requerida"
 				}
 			}
         },
         _code:{
             type: DataTypes.UUID,
-            defaultValue: Sequelize.UUIDV4
+            defaultValue: Sequelize.UUIDV4,
+			allowNull: false
         },
         _price:{
             type: DataTypes.FLOAT,
-			defaultValue: 0
+			defaultValue: 0,
+			allowNull: false
         },
         _stock:{
             type: DataTypes.INTEGER,
-			defaultValue: 0
+			defaultValue: 0,
+			allowNull: false
         },
         _image:{
             type: DataTypes.STRING,
-			defaultValue: 'Not image'
+			defaultValue: 'Not image',
+			allowNull: false
         }
 
 

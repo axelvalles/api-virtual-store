@@ -15,7 +15,10 @@ userController.login = async (req, res) => {
 			if (user) {
 				const verify = await bcript.compare(password, user.password);
 				if (verify) {
-					const token = jwt.sign(user.id + '|' + user.username, process.env.SECRET);
+					const token = jwt.sign(
+						user.id + '|' + user.username,
+						process.env.SECRET,
+					);
 					res.status(200).json({
 						status: true,
 						message: 'Ingreso al sistema',
@@ -48,15 +51,22 @@ userController.login = async (req, res) => {
 	}
 };
 
-userController.resgister = async (req, res) => {
+userController.resgister = (req, res) => {
 	const { email, fullname, username, password } = req.body;
 	try {
 		if (password.length < 6) {
-			return res.status(400).json({
+			res.status(401).json({
 				status: false,
-				message: 'El campo password debe ser mayor o igual a 6 caracteres',
+				message: 'Contraseña debe tener al menos 6 caracteres',
 			});
 		}
+		if (typeof password !== 'string') {
+			res.status(401).json({
+				status: false,
+				message: 'La contraseña debe ser un string'
+			});
+		}
+
 		User.create({
 			fullname,
 			username,
@@ -73,7 +83,10 @@ userController.resgister = async (req, res) => {
 			.catch(err => {
 				res.status(400).json({
 					status: false,
-					err,
+					error:{
+						message:"Verifica todos los campos",
+						err
+					}
 				});
 			});
 	} catch (err) {
@@ -81,7 +94,10 @@ userController.resgister = async (req, res) => {
 		res.status(500).json({
 			status: false,
 			message: 'Ocurrio un problema, vuelva a intentarlo',
-			err,
+			error:{
+				message:"Verifica todos los campos",
+				err
+			}
 		});
 	}
 };
@@ -95,6 +111,7 @@ userController.auth = async (req, res) => {
 				res.status(200).json({
 					status: true,
 					message: 'Token validado correctamente',
+					verify
 				});
 			}
 		} catch (err) {

@@ -11,30 +11,31 @@ User.init(
 			allowNull: false,
 			validate:{
 				notNull:{
-					msg: "El campo nombre es obligatorio"
+					msg: "El nombre es requerido"
 				},
 				len:{
 					args: [3,255],
 					msg: "El campo nombre debe ser mayor a 3 caracteres"
 				},
 				notEmpty:{
-					args: true,
 					msg: "El nombre es requerido"
-				}
+				},
+				
 
 			}
 		},
 		username: {
 			type: DataTypes.STRING,
 			allowNull: false,
-			unique: true,
+			unique:{
+				args: true,
+				msg: "El nombre de usuario ya esta en uso"
+			},
 			validate:{
 				isAlphanumeric:{
-					args: true,
 					msg: "El nombre de usuario no debe contener caracteres especiales"
 				},
 				notNull:{
-					args: true,
 					msg: "El nombre de usuario es obligatorio"
 				},
 				len:{
@@ -42,29 +43,30 @@ User.init(
 					msg: "El nombre de usuario debe ser mayor a 3 caracteres"
 				},
 				notEmpty:{
-					args: true,
 					msg: "El nombre de usuario es obligatorio"
 				},
-				isUnique: async(value)=>{
-					const verify = await User.findOne({
-						where: {
-							username: value
-						},
-					});
-					if (verify) {
-						throw new Error('El nombre de usuario ya esta en uso')
-					}
-				}
+				// isUnique: async(value)=>{
+				// 	const verify = await User.findOne({
+				// 		where: {
+				// 			username: value
+				// 		},
+				// 	});
+				// 	if (verify) {
+				// 		throw new Error('El nombre de usuario ya esta en uso')
+				// 	}
+				// }
 
 			}
 		},
 		email: {
 			type: DataTypes.STRING,
 			allowNull: false,
-			unique:true,
+			unique: {
+				args: true,
+				msg: "El nombre de usuario ya esta en uso"
+			},
 			validate: {
 				isEmail: {
-					args: true,
 					msg : "Debes escribir un email valido"
 				},
 				notNull:{
@@ -75,19 +77,18 @@ User.init(
 					msg: "Debes escribir un email valido"
 				},
 				notEmpty:{
-					args: true,
 					msg: "El Email  es obligatorio"
 				},
-				isUnique: async(value)=>{
-					const verify = await User.findOne({
-						where: {
-							email: value
-						},
-					});
-					if (verify) {
-						throw new Error('El email ya esta en uso')
-					}
-				}
+				// isUnique: async(value)=>{
+				// 	const verify = await User.findOne({
+				// 		where: {
+				// 			email: value
+				// 		},
+				// 	});
+				// 	if (verify) {
+				// 		throw new Error('El email ya esta en uso')
+				// 	}
+				// }
 			}
 		},
 		password: {
@@ -105,22 +106,30 @@ User.init(
 			}
 		},
 		phone: {
-			type: DataTypes.STRING,
-			defaultValue: "0000000",
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			defaultValue: "55555555",
 			validate: {
 				len: {
 					args: [7,20],
 					msg: "Se debe ingresar un numero de telefono valido"
+				},
+				isInt: {
+					msg: "Debes ingresar solo numeros"
 				}
 			}
 		},
 		address: {
 			type: DataTypes.STRING,
 			defaultValue: 'Sin direccion de domicilio',
+			allowNull: false,
 			validate: {
 				len:{
 					args: [3,255],
 					msg: "Debes ingresar un direccion valida"
+				},
+				notNull: {
+					msg: "La direccion es requerida"
 				}
 			}
 		},

@@ -17,12 +17,13 @@ Category.init(
 					args: [3,255],
 					msg: "El nombre de la categoria debe tener almenos 3 caracteres"
 				},
-				notNull: {
-					args: true,
+				notNull:{
 					msg: "El nombre de la categoria es requerido"
 				},
+				
 
 			}
+			
 		}
 	},
 	{
