@@ -16,6 +16,10 @@ User.init(
 				len:{
 					args: [3,255],
 					msg: "El campo nombre debe ser mayor a 3 caracteres"
+				},
+				notEmpty:{
+					args: true,
+					msg: "El nombre es requerido"
 				}
 
 			}
@@ -30,11 +34,16 @@ User.init(
 					msg: "El nombre de usuario no debe contener caracteres especiales"
 				},
 				notNull:{
+					args: true,
 					msg: "El nombre de usuario es obligatorio"
 				},
 				len:{
 					args: [3,35],
 					msg: "El nombre de usuario debe ser mayor a 3 caracteres"
+				},
+				notEmpty:{
+					args: true,
+					msg: "El nombre de usuario es obligatorio"
 				},
 				isUnique: async(value)=>{
 					const verify = await User.findOne({
@@ -64,6 +73,10 @@ User.init(
 				len:{
 					args: [5,255],
 					msg: "Debes escribir un email valido"
+				},
+				notEmpty:{
+					args: true,
+					msg: "El Email  es obligatorio"
 				},
 				isUnique: async(value)=>{
 					const verify = await User.findOne({
