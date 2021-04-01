@@ -4,51 +4,44 @@ const bcript = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 userController.login = async (req, res) => {
+	const { email, password } = req.body;
+	let user = null;
+
 	try {
-		const { email, password } = req.body;
-		if (email && password) {
-			const user = await User.findOne({
-				where: {
-					email,
-				},
-			});
-			if (user) {
-				const verify = await bcript.compare(password, user.password);
-				if (verify) {
-					const token = jwt.sign(
-						user.id + '|' + user.username,
-						process.env.SECRET,
-					);
-					res.status(200).json({
-						status: true,
-						message: 'Ingreso al sistema',
-						token,
-					});
-				} else {
-					res.status(400).json({
-						status: false,
-						message: 'Contraseña invalida',
-					});
-				}
-			} else {
-				res.status(400).json({
-					status: false,
-					message: 'Usuario no existe compruebe sus datos',
-				});
-			}
-		} else {
-			res.status(400).json({
-				status: false,
-				message: 'Campos obligatorios requeridos',
-			});
-		}
+		user = await User.findOne({
+			attributes: ['id', 'fullname', 'username', 'email'],
+			where: { email },
+		});
 	} catch (error) {
-		console.log(error);
 		res.status(500).json({
-			status: false,
-			message: 'Ocurrio un error, vuelva a intentarlo',
+			status: 500,
+			error: 'Process Falied',
+			message: 'Ha ocurriod un error, intente más tarde',
 		});
 	}
+
+	if (!user)
+		return res.status(400).json({
+			status: 404,
+			error: 'Bad Credential',
+			message: 'Credenciales Inválidas',
+		});
+
+	const token = jwt.sign({ user }, process.env.APP_KEY || 'fffffffffff', {
+		expiresIn: '1h',
+	});
+
+	res.json({
+		status: 200,
+		auth: true,
+		message: 'ok',
+		user,
+		token,
+	});
+
+	res.json({
+		user: user,
+	});
 };
 
 userController.resgister = (req, res) => {
@@ -63,7 +56,7 @@ userController.resgister = (req, res) => {
 		if (typeof password !== 'string') {
 			res.status(401).json({
 				status: false,
-				message: 'La contraseña debe ser un string'
+				message: 'La contraseña debe ser un string',
 			});
 		}
 
@@ -83,10 +76,10 @@ userController.resgister = (req, res) => {
 			.catch(err => {
 				res.status(400).json({
 					status: false,
-					error:{
-						message:"Verifica todos los campos",
-						err
-					}
+					error: {
+						message: 'Verifica todos los campos',
+						err,
+					},
 				});
 			});
 	} catch (err) {
@@ -94,10 +87,10 @@ userController.resgister = (req, res) => {
 		res.status(500).json({
 			status: false,
 			message: 'Ocurrio un problema, vuelva a intentarlo',
-			error:{
-				message:"Verifica todos los campos",
-				err
-			}
+			error: {
+				message: 'Verifica todos los campos',
+				err,
+			},
 		});
 	}
 };
@@ -111,7 +104,7 @@ userController.auth = async (req, res) => {
 				res.status(200).json({
 					status: true,
 					message: 'Token validado correctamente',
-					verify
+					verify,
 				});
 			}
 		} catch (err) {
