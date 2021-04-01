@@ -11,35 +11,40 @@ categoryController.findAll = async (req, res) => {
 	} catch (error) {
 		res.status(500).json({
 			status: 500,
-			message: error,
+			error: 'Process Falied',
+			message: {
+				error,
+			},
 		});
 	}
 };
 
 categoryController.findOne = async (req, res) => {
-	const {id} = req.params
+	const { id } = req.params;
 	try {
-		const data = await Category.findByPk(id)
-		if(data){
-			res.json({
-				status: 200,
-				categories: data,
+		const data = await Category.findByPk(id);
+		if (!data)
+			return res.status(404).json({
+				status: 404,
+				error: 'Resource Not Found',
+				message: 'Categoria no Encontrada',
 			});
-		}else{
-			res.status(500).json({
-				status: 500,
-				message: "Categoria no encontrada",
-			});
-		}
+
+		res.json({
+			status: 200,
+			categories: data,
+		});
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({
 			status: 500,
-			message: error,
+			error: 'Process Falied',
+			message: {
+				error,
+			},
 		});
-
 	}
-}
+};
 
 categoryController.create = async (req, res) => {
 	const { name } = req.body;
@@ -56,7 +61,10 @@ categoryController.create = async (req, res) => {
 	} catch (error) {
 		res.status(500).json({
 			status: 500,
-			message: error,
+			error: 'Process Falied',
+			message: {
+				error,
+			},
 		});
 	}
 };
@@ -66,59 +74,57 @@ categoryController.update = async (req, res) => {
 	const { name } = req.body;
 	try {
 		const category = await Category.update({ _name: name }, { where: { id } });
-		if(category[0] != 0){
-			res.json({
-				status: 200,
-				category,
-				message: 'Categoria actulizada con exito',
+		if (category[0] === 0)
+			return res.status(400).json({
+				status: 400,
+				error: 'Bad Request',
+				message: 'Categoria Inválida',
 			});
-		}else{
-			res.json({
-				status: 500,
-				category,
-				message: 'Id invalido',
-			});
-		}
-		
-	} catch (error) {
+
 		res.json({
+			status: 200,
+			message: 'Categoria actulizada con exito',
+		});
+	} catch (error) {
+		res.status(500).json({
 			status: 500,
-			message: 'Ocurrio un error vuelve a intentarlo',
-			error
+			error: 'Process Falied',
+			message: {
+				error,
+			},
 		});
 	}
 };
 
-
 categoryController.destroy = async (req, res) => {
-	const {id} = req.params
-	try {	
+	const { id } = req.params;
+	try {
 		const category = await Category.destroy({
-			where:{
-				id
-			}
-		})
-		if(category){
-			res.json({
-				status: 200,
-				category,
-				message: 'Categoria eliminada con exito',
+			where: {
+				id,
+			},
+		});
+		if (!category)
+			return res.status(400).json({
+				status: 400,
+				error: 'Bad Request',
+				message: 'Categoria Inválida',
 			});
-		}
-		else{
-			res.json({
-				status: 500,
-				message: 'Id invalido',
-			});
-		}
+
+		res.json({
+			status: 200,
+			message: 'Categoria Eliminada',
+		});
 	} catch (error) {
 		console.log(error);
 		res.json({
 			status: 500,
-			message: 'Ocurrio un error vuelve a intentarlo',
-			error
+			error: 'Process Falied',
+			message: {
+				error,
+			},
 		});
 	}
-}
+};
 
 module.exports = categoryController;
