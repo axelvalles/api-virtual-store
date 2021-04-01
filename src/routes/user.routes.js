@@ -4,13 +4,13 @@ const {
 	userRequestLogin,
 	userRequestRegister,
 } = require('../requests/user.request');
-
+const requestJson = require('../middlewares/request.middleware');
 const { login, resgister, auth } = require('../controllers/user.controller');
 
-router.post('/login', userRequestLogin, login);
+router.post('/login', requestJson, userRequestLogin, login);
 
-router.post('/register', userRequestRegister, resgister);
+router.post('/register', requestJson, userRequestRegister, resgister);
 
-router.get('/auth', auth);
+router.get('/auth', requestJson, auth);
 
 module.exports = router;
