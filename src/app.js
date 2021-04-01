@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
-require('./models/associations/associations')
+require('./models/associations/associations');
 
 //initialization
 const app = express();
@@ -11,7 +11,7 @@ app.set('PORT', process.env.PORT || 3000);
 app.set('APPNAME', process.env.APP_NAME || 'API Staionery Store');
 
 // MIDDLEWARES
-app.use(express.json());
+app.use(express.json({ type: 'application/json', limit: '200kb' }));
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 app.use(helmet());
