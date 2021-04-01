@@ -9,7 +9,7 @@ userController.login = async (req, res) => {
 
 	try {
 		user = await User.findOne({
-			attributes: ['id', 'fullname', 'username', 'email'],
+			attributes: ['id', 'fullname', 'username', 'email', 'password'],
 			where: { email },
 		});
 	} catch (error) {
@@ -19,47 +19,39 @@ userController.login = async (req, res) => {
 			message: 'Ha ocurriod un error, intente más tarde',
 		});
 	}
-
-	if (!user)
-		return res.status(400).json({
+	if (!user || !bcript.compareSync(password, user.password))
+		return res.status(404).json({
 			status: 404,
+			auth: false,
 			error: 'Bad Credential',
 			message: 'Credenciales Inválidas',
 		});
 
-	const token = jwt.sign({ user }, process.env.APP_KEY || 'fffffffffff', {
-		expiresIn: '1h',
-	});
+	const token = jwt.sign(
+		{ auth_user: { id: user.id, email: user.email } },
+		process.env.APP_KEY || 'fffffffffff',
+		{
+			expiresIn: '1h',
+		},
+	);
 
 	res.json({
 		status: 200,
 		auth: true,
 		message: 'ok',
-		user,
+		user: {
+			id: user.id,
+			email: user.email,
+			fullname: user.fullname,
+			username: user.username,
+		},
 		token,
-	});
-
-	res.json({
-		user: user,
 	});
 };
 
 userController.resgister = (req, res) => {
 	const { email, fullname, username, password } = req.body;
 	try {
-		if (password.length < 6) {
-			res.status(401).json({
-				status: false,
-				message: 'Contraseña debe tener al menos 6 caracteres',
-			});
-		}
-		if (typeof password !== 'string') {
-			res.status(401).json({
-				status: false,
-				message: 'La contraseña debe ser un string',
-			});
-		}
-
 		User.create({
 			fullname,
 			username,
