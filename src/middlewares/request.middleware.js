@@ -1,5 +1,5 @@
 const requestJson = (req, res, next) => {
-	if (req.headers['content-type'] !== 'application/json')
+	if (req.headers['content-type'] !== 'application/json' && req.is('json'))
 		return res.status(401).json({
 			status: 401,
 			error: 'UNAUTHORIZED',
