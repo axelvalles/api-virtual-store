@@ -1,10 +1,9 @@
 const app = require('./app');
 const sequelize = require('./database');
-require('dotenv').config()
+require('dotenv').config();
 
 async function main() {
 	await app.listen(app.get('PORT'));
-	console.log(`${app.get('APPNAME')} Listening On Port ${app.get('PORT')}`);
 	console.log(`http://localhost:${app.get('PORT')}`);
 	try {
 		await sequelize.sync({ force: true });
