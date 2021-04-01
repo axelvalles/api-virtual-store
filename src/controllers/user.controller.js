@@ -51,40 +51,47 @@ userController.login = async (req, res) => {
 
 userController.resgister = (req, res) => {
 	const { email, fullname, username, password } = req.body;
-	try {
-		User.create({
-			fullname,
-			username,
-			email,
-			password,
-		})
-			.then(user => {
-				res.status(201).json({
-					status: true,
-					message: 'Resgistro completado',
-					user,
-				});
-			})
-			.catch(err => {
-				res.status(400).json({
-					status: false,
-					error: {
-						message: 'Verifica todos los campos',
-						err,
-					},
-				});
+	User.create({
+		fullname,
+		username,
+		email,
+		password,
+	})
+		.then(user => {
+			const {
+				id,
+				fullname,
+				email,
+				username,
+				address,
+				phone,
+				createdAt,
+				updatedAt,
+			} = user;
+			res.status(201).json({
+				status: true,
+				message: 'Resgistro completado',
+				user: {
+					id,
+					fullname,
+					email,
+					username,
+					address,
+					phone,
+					createdAt,
+					updatedAt,
+				},
 			});
-	} catch (err) {
-		console.log(err);
-		res.status(500).json({
-			status: false,
-			message: 'Ocurrio un problema, vuelva a intentarlo',
-			error: {
-				message: 'Verifica todos los campos',
-				err,
-			},
+		})
+		.catch(err => {
+			res.status(400).json({
+				status: 400,
+				error: {
+					message: 'Bad Request',
+					info: err.errors,
+				},
+			});
 		});
-	}
 };
 
 userController.auth = async (req, res) => {

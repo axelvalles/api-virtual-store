@@ -1,12 +1,15 @@
 const { Router } = require('express');
 const router = Router();
-const { userRequestLogin } = require('../requests/user.request');
+const {
+	userRequestLogin,
+	userRequestRegister,
+} = require('../requests/user.request');
 
 const { login, resgister, auth } = require('../controllers/user.controller');
 
 router.post('/login', userRequestLogin, login);
 
-router.post('/register', resgister);
+router.post('/register', userRequestRegister, resgister);
 
 router.get('/auth', auth);
 
