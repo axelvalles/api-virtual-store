@@ -1,27 +1,29 @@
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 const auth = (req, res, next) => {
-    const token = req.headers['authorization'];
-	if (token) {
-		try {
-			const verify = jwt.verify(token, process.env.SECRET);
-			if (verify) {
-				next()
-			}
-		} catch (err) {
-			res.status(400).json({
-				status: false,
-				message: 'Token no invalido',
-				err,
-			});
-		}
-	} else {
-		res.status(400).json({
-			status: false,
-			message: 'Token no proveido',
+	const token = req.headers['authorization'];
+
+	if (!token) {
+		return res.status(401).json({
+			status: 401,
+			error: 'UNAUTORAIZED',
+			message: 'No has provisto un token',
 		});
 	}
-}
 
+	try {
+		jwt.verify(token, process.env.APP_KEY || 'fffffffffff');
+	} catch (error) {
+		return res.status(401).json({
+			status: 401,
+			error: 'UNAUTORAIZED',
+			message: {
+				error,
+			},
+		});
+	}
 
-module.exports = auth
+	next();
+};
+
+module.exports = auth;
