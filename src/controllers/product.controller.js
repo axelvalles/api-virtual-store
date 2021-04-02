@@ -1,9 +1,14 @@
-const Product = require('../models/product.model')
+const Product = require('../models/product.model');
+const Category = require('../models/category.model');
 const productController = {};
 
 productController.findAll = async (req, res) => {
 	try {
-		const data = await Product.findAll();
+		const data = await Product.findAll({
+			include: {
+				model: Category,
+			},
+		});
 		res.json({
 			status: 200,
 			Products: data,
@@ -17,133 +22,130 @@ productController.findAll = async (req, res) => {
 };
 
 productController.findOne = async (req, res) => {
-	const {id} = req.params
+	const { id } = req.params;
 	try {
-		const data = await Product.findByPk(id)
-		if(data){
-			res.json({
+		const data = await Product.findByPk(id);
+		if (data) {
+			return res.json({
 				status: 200,
 				categories: data,
 			});
-		}else{
-			res.status(500).json({
-				status: 500,
-				message: "Producto no encontrado",
-			});
 		}
+
+		res.status(404).json({
+			status: 404,
+			error: 'Resource Not Found',
+			message: 'Producto no encontrado',
+		});
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({
 			status: 500,
 			message: error,
 		});
-
 	}
-}
+};
 
 productController.create = async (req, res) => {
-	const { name, description, image, price, stock, categoryId } = req.body;
+	const { name, description, code, image, price, stock, categoryId } = req.body;
 
-	try {
-		Product.create({
-			_name: name,
-			_description: description,
-			_price: price,
-			_stock: stock,
-			_image : image,
-			_categoryId: categoryId
-		})
+	Product.create({
+		_name: name,
+		_description: description,
+		_code: code,
+		_price: price,
+		_stock: stock,
+		_image: image,
+		_categoryId: categoryId,
+	})
 		.then(product => {
 			res.status(201).json({
-				status: true,
+				status: 201,
 				message: 'Producto creado con exito',
-				product
+				product: product,
 			});
 		})
 		.catch(err => {
-			console.log(err)
-			res.status(400).json({
-				status: false,
-				error:{
-					message:"Error vuelve a intentarlo",
-					err
-				}
+			res.status(500).json({
+				status: 500,
+				error: 'Process Falied',
+				message: {
+					info: 'Error vuelve a intentarlo',
+					err,
+				},
 			});
 		});
-	} catch (error) {
-		res.status(500).json({
-			status: 500,
-			message: error,
-		});
-	}
-}
+};
 
-productController.update = async (req,res) => {
+productController.update = async (req, res) => {
 	const { id } = req.params;
-	const { name, description, image, price, stock } = req.body;
+	const { name, description, image, price, stock, code } = req.body;
 	try {
-		const product = await Product.update({ 
-			_name: name,
-			_description: description,
-			_price: price,
-			_stock: stock,
-			_image : image,
-		},{ 
-			where: { id } 
-		});
-		if(product[0] != 0){
-			res.json({
+		const product = await Product.update(
+			{
+				_name: name,
+				_description: description,
+				_price: price,
+				_stock: stock,
+				_image: image,
+				_code: code,
+			},
+			{
+				where: { id },
+			},
+		);
+		if (product[0]) {
+			return res.json({
 				status: 200,
-				product,
 				message: 'Producto actulizado con exito',
 			});
-		}else{
-			res.json({
-				status: 500,
-				message: 'id invalido',
-			});
 		}
-		
+
+		res.json({
+			status: 404,
+			error: 'Resource Not Found',
+			message: 'Producto no Encontrado',
+		});
 	} catch (error) {
 		console.log(error);
 		res.json({
 			status: 500,
-			message: 'Ocurrio un error vuelve a intentarlo',
-			error
+			error: 'Process Falied',
+			message: {
+				error,
+			},
 		});
 	}
-}
+};
 
 productController.destroy = async (req, res) => {
-	const {id} = req.params
-	try {	
+	const { id } = req.params;
+	try {
 		const product = await Product.destroy({
-			where:{
-				id
-			}
-		})
-		if(product){
-			res.json({
+			where: {
+				id,
+			},
+		});
+		if (product) {
+			return res.json({
 				status: 200,
 				product,
 				message: 'Categoria eliminada con exito',
 			});
 		}
-		else{
-			res.json({
-				status: 500,
-				message: 'Id invalido',
-			});
-		}
+
+		res.json({
+			status: 404,
+			error: 'Resource Not Found',
+			message: 'Producto no Encontrado',
+		});
 	} catch (error) {
-		console.log(error);
 		res.json({
 			status: 500,
-			message: 'Ocurrio un error vuelve a intentarlo',
-			error
+			error: 'Process Falied',
+			message: { error },
 		});
 	}
-}
-
+};
 
 module.exports = productController;
