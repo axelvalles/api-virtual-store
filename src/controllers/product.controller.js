@@ -25,12 +25,11 @@ productController.findOne = async (req, res) => {
 	const { id } = req.params;
 	try {
 		const data = await Product.findByPk(id);
-		if (data) {
+		if (data)
 			return res.json({
 				status: 200,
 				categories: data,
 			});
-		}
 
 		res.status(404).json({
 			status: 404,
@@ -94,12 +93,11 @@ productController.update = async (req, res) => {
 				where: { id },
 			},
 		);
-		if (product[0]) {
+		if (product[0])
 			return res.json({
 				status: 200,
 				message: 'Producto actulizado con exito',
 			});
-		}
 
 		res.json({
 			status: 404,
@@ -126,13 +124,12 @@ productController.destroy = async (req, res) => {
 				id,
 			},
 		});
-		if (product) {
+		if (product)
 			return res.json({
 				status: 200,
 				product,
 				message: 'Categoria eliminada con exito',
 			});
-		}
 
 		res.json({
 			status: 404,
