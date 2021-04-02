@@ -1,56 +1,56 @@
-const sellController = {}
-const Sell = require('../models/sell.model')
+const sellController = {};
+const Sell = require('../models/sell.model');
 
 sellController.findAll = async (req, res) => {
-    try {
+	try {
 		const data = await Sell.findAll();
 		res.json({
 			status: 200,
-			Sells: data,
+			sells: data,
 		});
 	} catch (error) {
 		res.status(500).json({
 			status: 500,
-			message: error,
+			error: 'Process Falied',
+			message: { error },
 		});
 	}
-}
+};
 
 sellController.findOne = async (req, res) => {
-    const {id} = req.params
-    try {
-        const data = await Sell.findByPk(id)
-        if(data){
-			res.json({
+	const { id } = req.params;
+	try {
+		const data = await Sell.findByPk(id);
+		if (data)
+			return res.json({
 				status: 200,
-				Sell: data,
+				sell: data,
 			});
-		}else{
-			res.status(500).json({
-				status: 500,
-				message: "Venta no encontrada",
-			});
-		}
 
-    } catch (error) {
-        res.status(500).json({
-			status: 500,
-			message: error,
+		res.status(404).json({
+			status: 404,
+			error: 'Resource Not Found',
+			message: ' Venta no encontrada',
 		});
-    }
-}
+	} catch (error) {
+		res.status(500).json({
+			status: 500,
+			error: 'Process Falied',
+			message: { error },
+		});
+	}
+};
 
 sellController.create = async (req, res) => {
 	const { quantity, priceByUnit, userId, productId } = req.body;
-	const total = quantity * priceByUnit
+	const total = quantity * priceByUnit;
 	try {
 		const sell = await Sell.create({
 			_quantity: quantity,
 			_priceByUnit: priceByUnit,
 			_total: total,
 			_userId: userId,
-			_productId: productId
-
+			_productId: productId,
 		});
 		res.status(201).json({
 			status: 201,
@@ -63,38 +63,35 @@ sellController.create = async (req, res) => {
 			message: error,
 		});
 	}
-}
+};
 
 sellController.destroy = async (req, res) => {
-    const {id} = req.params
-	try {	
+	const { id } = req.params;
+	try {
 		const sell = await Sell.destroy({
-			where:{
-				id
-			}
-		})
-		if(sell){
-			res.json({
+			where: {
+				id,
+			},
+		});
+
+		if (sell)
+			return res.json({
 				status: 200,
-				sell,
-				message: 'Venta eliminada con exito',
+				message: 'Venta Eliminada con Exito',
 			});
-		}
-		else{
-			res.json({
-				status: 500,
-				message: 'Id invalido',
-			});
-		}
+
+		res.status(404).json({
+			status: 404,
+			error: 'Resource Not Found',
+			message: { error },
+		});
 	} catch (error) {
-		console.log(error);
 		res.json({
 			status: 500,
-			message: 'Ocurrio un error vuelve a intentarlo',
-			error
+			error: 'Process Falied',
+			message: { error },
 		});
 	}
-}
+};
 
-
-module.exports = sellController
+module.exports = sellController;
