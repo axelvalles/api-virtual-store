@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
+require('dotenv').config();
 require('./models/associations/associations');
 
 //initialization
