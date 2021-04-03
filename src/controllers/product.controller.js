@@ -48,7 +48,15 @@ productController.findOne = async (req, res) => {
 };
 
 productController.create = async (req, res) => {
-	const { name, description, code, image, price, stock, categoryId } = req.body;
+	const {
+		name,
+		description,
+		code,
+		image,
+		price,
+		stock,
+		category_id,
+	} = req.body;
 
 	Product.create({
 		_name: name,
@@ -57,7 +65,7 @@ productController.create = async (req, res) => {
 		_price: price,
 		_stock: stock,
 		_image: image,
-		categoryId,
+		category_id,
 	})
 		.then(product => {
 			res.status(201).json({
