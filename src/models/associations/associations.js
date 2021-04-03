@@ -5,26 +5,34 @@ const Sell = require('../sell.model');
 const SellHeader = require('../sellHeader.model');
 
 Category.hasMany(Product, {
-	foreignKey: 'categoryId',
+	foreignKey: 'category_id',
+	onDelete: 'set null',
+	onUpdate: 'cascade',
 });
 Product.belongsTo(Category, {
-	foreignKey: 'id',
+	foreignKey: 'category_id',
+	onDelete: 'set null',
+	onUpdate: 'cascade',
 });
 
 User.hasMany(Sell, {
-	as: 'user',
-	foreignKey: {
-		name: '_userId',
-		allowNull: false,
-	},
+	foreignKey: 'user_id',
+	onDelete: 'set null',
+	onUpdate: 'cascade',
 });
-Sell.belongsTo(User);
 
-Product.hasMany(Sell, {
-	as: 'product',
-	foreignKey: {
-		name: '_productId',
-		allowNull: false,
-	},
+Sell.belongsTo(User, {
+	foreignKey: 'user_id',
+	onDelete: 'set null',
+	onUpdate: 'cascade',
 });
-Sell.belongsTo(Product);
+
+Product.belongsToMany(Sell, {
+	through: 'product_shell',
+	foreignKey: 'product_id',
+});
+
+Sell.belongsToMany(Product, {
+	through: 'product_shell',
+	foreignKey: 'shell_id',
+});
