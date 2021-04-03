@@ -4,8 +4,12 @@ const User = require('../user.model');
 const Sell = require('../sell.model');
 const SellHeader = require('../sellHeader.model');
 
-Category.hasMany(Product);
-Product.belongsTo(Category);
+Category.hasMany(Product, {
+	foreignKey: 'categoryId',
+});
+Product.belongsTo(Category, {
+	foreignKey: 'id',
+});
 
 User.hasMany(Sell, {
 	as: 'user',

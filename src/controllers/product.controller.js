@@ -24,7 +24,9 @@ productController.findAll = async (req, res) => {
 productController.findOne = async (req, res) => {
 	const { id } = req.params;
 	try {
-		const data = await Product.findByPk(id);
+		const data = await Product.findByPk(id, {
+			include: { model: Category },
+		});
 		if (data)
 			return res.json({
 				status: 200,
@@ -55,7 +57,7 @@ productController.create = async (req, res) => {
 		_price: price,
 		_stock: stock,
 		_image: image,
-		_categoryId: categoryId,
+		categoryId,
 	})
 		.then(product => {
 			res.status(201).json({
@@ -128,7 +130,7 @@ productController.destroy = async (req, res) => {
 			return res.json({
 				status: 200,
 				product,
-				message: 'Categoria eliminada con exito',
+				message: 'Producto eliminado con exito',
 			});
 
 		res.json({
