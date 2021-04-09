@@ -50,12 +50,14 @@ userController.login = async (req, res) => {
 };
 
 userController.resgister = (req, res) => {
-	const { email, fullname, username, password } = req.body;
+	const { email, fullname, username, password,address,phone } = req.body;
 	User.create({
 		fullname,
 		username,
 		email,
 		password,
+		address,
+		phone
 	})
 		.then(user => {
 			const {
@@ -98,7 +100,7 @@ userController.auth = async (req, res) => {
 	const token = req.headers['authorization'];
 	if (token) {
 		try {
-			const verify = jwt.verify(token, process.env.SECRET);
+			const verify = jwt.verify(token, process.env.SECRET || 'fffffffffff');
 			if (verify) {
 				res.status(200).json({
 					status: true,

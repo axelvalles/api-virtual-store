@@ -11,6 +11,6 @@ router.post('/login', requestJson, userRequestLogin, login);
 
 router.post('/register', requestJson, userRequestRegister, resgister);
 
-router.get('/auth', requestJson, auth);
+router.get('/auth', auth);
 
 module.exports = router;
