@@ -36,13 +36,8 @@ Product.init(
 				},
 			},
 		},
-		_code: {
-			type: DataTypes.UUID,
-			defaultValue: Sequelize.UUIDV4,
-			allowNull: false,
-		},
 		_price: {
-			type: DataTypes.FLOAT,
+			type: DataTypes.INTEGER,
 			defaultValue: 0,
 			allowNull: false,
 			validate: {
@@ -65,11 +60,10 @@ Product.init(
 				},
 			},
 		},
-		_image: {
-			type: DataTypes.STRING,
-			defaultValue: 'Not image',
-			allowNull: false,
-		},
+		_status: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: true
+		}
 	},
 	{
 		sequelize,

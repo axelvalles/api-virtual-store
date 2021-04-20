@@ -9,7 +9,7 @@ userController.login = async (req, res) => {
 
 	try {
 		user = await User.findOne({
-			attributes: ['id', 'fullname', 'username', 'email', 'password'],
+			attributes: ['id', 'fullname', 'username', 'email', 'password', 'phone', 'address'],
 			where: { email },
 		});
 	} catch (error) {
@@ -31,7 +31,7 @@ userController.login = async (req, res) => {
 		{ auth_user: { id: user.id, email: user.email } },
 		process.env.APP_KEY || 'fffffffffff',
 		{
-			expiresIn: '1h',
+			expiresIn: '12h',
 		},
 	);
 
@@ -44,6 +44,8 @@ userController.login = async (req, res) => {
 			email: user.email,
 			fullname: user.fullname,
 			username: user.username,
+			phone: user.phone,
+			address: user.address
 		},
 		token,
 	});
@@ -96,6 +98,39 @@ userController.resgister = (req, res) => {
 		});
 };
 
+userController.isAdmin = async (req, res) => {
+	const token = req.headers['authorization'];
+	if (token) {
+		let user = null
+		try {
+			const verify = jwt.verify(token, process.env.SECRET || 'fffffffffff');
+			const id = verify.auth_user.id
+			user = await User.findOne({
+				attributes: ['admin'],
+				where: { id },
+			});
+			if (verify) {
+				res.status(200).json({
+					status: true,
+					message: 'Token validado correctamente',
+					user
+				});
+			}
+		} catch (err) {
+			res.status(400).json({
+				status: false,
+				message: 'Token invalido',
+				err,
+			});
+		}
+	} else {
+		res.status(400).json({
+			status: false,
+			message: 'Token no proveido',
+		});
+	}
+};
+
 userController.auth = async (req, res) => {
 	const token = req.headers['authorization'];
 	if (token) {
@@ -111,7 +146,7 @@ userController.auth = async (req, res) => {
 		} catch (err) {
 			res.status(400).json({
 				status: false,
-				message: 'Token no invalido',
+				message: 'Token invalido',
 				err,
 			});
 		}

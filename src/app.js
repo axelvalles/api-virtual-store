@@ -2,6 +2,9 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
+const multer = require('multer')
+const path = require('path')
+const uuid = require('uuid')
 require('dotenv').config();
 require('./models/associations/associations');
 
@@ -11,6 +14,12 @@ const app = express();
 // SETTINGS
 app.set('PORT', process.env.PORT || 4400);
 app.set('APPNAME', process.env.APP_NAME || 'API Staionery Store');
+const storage = multer.diskStorage({
+    destination: path.join( __dirname, 'public/img/uploads/' ) ,
+    filename: (req, file, cb, filename) => {
+        cb(null, uuid.v4() + path.extname(file.originalname))
+    }
+})
 
 // MIDDLEWARES
 app.use(express.json({ type: 'application/json', limit: '200kb' }));
@@ -18,7 +27,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors());
+app.use(multer({ storage: storage }).single('image'))
 // PUBLIC STATICS
+
 // GLOBAL VARIABLES
 // ROUTES
 app.use('/products', require('./routes/product.routes'));

@@ -9,10 +9,10 @@ const {
 } = require('../controllers/product.controller');
 const auth = require('../middlewares/auth.middleware');
 const requestJson = require('../middlewares/request.middleware');
-router.get('/', requestJson, findAll);
-router.get('/:id', requestJson, auth, findOne);
-router.post('/add', requestJson, auth, create);
-router.put('/update/:id', requestJson, auth, update);
-router.delete('/delete/:id', requestJson, auth, destroy);
+router.get('/',  findAll);
+router.get('/:id',  auth, findOne);
+router.post('/add', auth, create);
+router.put('/update/:id',  auth, update);
+router.delete('/delete/:id',  auth, destroy);
 
 module.exports = router;
