@@ -5,7 +5,6 @@ const cors = require('cors');
 const multer = require('multer')
 const path = require('path')
 const uuid = require('uuid')
-require('dotenv').config();
 require('./models/associations/associations');
 
 //initialization
