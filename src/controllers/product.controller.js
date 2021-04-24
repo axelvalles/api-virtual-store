@@ -1,23 +1,23 @@
 const Product = require('../models/product.model');
 const Category = require('../models/category.model');
-const Image = require('../models/image.model')
+const Image = require('../models/image.model');
 const sequelize = require('../database');
 const productController = {};
 
 productController.findAll = async (req, res) => {
 	try {
 		const data = await Product.findAll({
-			where:{
-				_status: true
+			where: {
+				_status: true,
 			},
 			include: [
 				{
-					model: Category
+					model: Category,
 				},
 				{
-					model: Image
-				}
-			]
+					model: Image,
+				},
+			],
 		});
 		res.json({
 			status: 200,
@@ -37,12 +37,12 @@ productController.findOne = async (req, res) => {
 		const data = await Product.findByPk(id, {
 			include: [
 				{
-					model: Category
+					model: Category,
 				},
 				{
-					model: Image
-				}
-			]
+					model: Image,
+				},
+			],
 		});
 		if (data)
 			return res.json({
@@ -65,13 +65,8 @@ productController.findOne = async (req, res) => {
 };
 
 productController.create = async (req, res) => {
-	const {
-		name,
-		description,
-		price,
-		stock,
-		category_id,
-	} = req.body;
+	const { name, description, price, stock, category_id } = req.body;
+
 	const t = await sequelize.transaction();
 	try {
 		let product = await Product.create({
@@ -80,53 +75,47 @@ productController.create = async (req, res) => {
 			_price: price,
 			_stock: stock,
 			category_id,
-		})
-			await Image.create({
+		});
+		await Image.create({
 			product_id: product.id,
-			_name: req.file.filename ,
+			_name: req.file.filename,
 			_originalname: req.file.originalname,
 			_path: req.file.path,
 			_mimetype: req.file.mimetype,
-			_size: req.file.size
-		})
+			_size: req.file.size,
+		});
 
 		await t.commit();
 		res.json({
 			status: 200,
 			message: 'Producto creado con exito',
-			product
-		})
-		
+			product,
+		});
 	} catch (error) {
 		res.status(500).json({
 			status: 500,
 			message: error,
 		});
 	}
-	
-	
-
-
-	
 };
 
 productController.update = async (req, res) => {
 	const { id } = req.params;
-	const { name, description, image, price, stock, code } = req.body;
+	const { name, description, price, stock } = req.body;
+	
 	try {
 		const product = await Product.update(
 			{
 				_name: name,
 				_description: description,
 				_price: price,
-				_stock: stock,
-				_image: image,
-				_code: code,
+				_stock: stock
 			},
 			{
 				where: { id },
 			},
 		);
+		
 		if (product[0])
 			return res.json({
 				status: 200,
@@ -153,26 +142,22 @@ productController.update = async (req, res) => {
 productController.destroy = async (req, res) => {
 	const { id } = req.params;
 	try {
-		const product = await Product.findOne({
-			include:{
-				model: Image
+		const product = await Product.destroy({
+			include: {
+				model: Image,
 			},
 			where: {
 				id,
 			},
 		});
-		if (product)
-			return res.json({
+
+		if (product){
+			res.json({
 				status: 200,
 				product,
 				message: 'Producto eliminado con exito',
 			});
-
-		res.json({
-			status: 404,
-			error: 'Resource Not Found',
-			message: 'Producto no Encontrado',
-		});
+	}
 	} catch (error) {
 		res.json({
 			status: 500,

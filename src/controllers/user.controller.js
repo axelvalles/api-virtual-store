@@ -29,7 +29,7 @@ userController.login = async (req, res) => {
 
 	const token = jwt.sign(
 		{ auth_user: { id: user.id, email: user.email } },
-		process.env.APP_KEY || 'fffffffffff',
+		process.env.APP_KEY ,
 		{
 			expiresIn: '12h',
 		},
@@ -103,7 +103,7 @@ userController.isAdmin = async (req, res) => {
 	if (token) {
 		let user = null
 		try {
-			const verify = jwt.verify(token, process.env.SECRET || 'fffffffffff');
+			const verify = jwt.verify(token, process.env.SECRET);
 			const id = verify.auth_user.id
 			user = await User.findOne({
 				attributes: ['admin'],
@@ -135,7 +135,7 @@ userController.auth = async (req, res) => {
 	const token = req.headers['authorization'];
 	if (token) {
 		try {
-			const verify = jwt.verify(token, process.env.SECRET || 'fffffffffff');
+			const verify = jwt.verify(token, process.env.SECRET);
 			if (verify) {
 				res.status(200).json({
 					status: true,

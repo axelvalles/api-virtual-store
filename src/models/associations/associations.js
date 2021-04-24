@@ -3,7 +3,7 @@ const Category = require('../category.model');
 const User = require('../user.model');
 const Sell = require('../sell.model');
 const Image = require('../image.model')
-const SellHeader = require('../sellHeader.model');
+
 
 Category.hasMany(Product, {
 	foreignKey: 'category_id',
@@ -18,12 +18,12 @@ Product.belongsTo(Category, {
 
 Product.hasOne(Image, {
 	foreignKey: 'product_id',
-	onDelete: 'set null',
+	onDelete: 'cascade',
 	onUpdate: 'cascade',
 });
 Image.belongsTo(Product, {
 	foreignKey: 'product_id',
-	onDelete: 'set null',
+	onDelete: 'cascade',
 	onUpdate: 'cascade',
 });
 
