@@ -12,7 +12,7 @@ const auth = (req, res, next) => {
 	}
 
 	try {
-		jwt.verify(token, process.env.APP_KEY || 'fffffffffff');
+		jwt.verify(token, process.env.SECRET);
 	} catch (error) {
 		return res.status(401).json({
 			status: 401,

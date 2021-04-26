@@ -29,7 +29,7 @@ userController.login = async (req, res) => {
 
 	const token = jwt.sign(
 		{ auth_user: { id: user.id, email: user.email } },
-		process.env.APP_KEY ,
+		process.env.SECRET ,
 		{
 			expiresIn: '12h',
 		},
